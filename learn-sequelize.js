@@ -8,6 +8,8 @@ const { Genre, Movie, Actor } = require("./models");
 */
 function insertNewGenre() {
   // Add code here
+   return Genre.create({id:4,name:"Thriller"});
+ 
 }
 
 /*
@@ -18,27 +20,42 @@ function insertNewGenre() {
 */
 function insertNewMovie() {
   // Add code here
+  return Movie.create({ id: 6, title: "Shutter Island", year: 2010, genreId: 4 });
 }
 
 /*
   Write a function that returns the title of the movie with ID=2
 */
-function getMovieWithId2() {
+async function getMovieWithId2() {
   // Add code here
+   const mov2 = await Movie.findByPk(2);
+   return mov2.title;
+
+   
 }
 
 /*
   Write a function that returns an array of all the actor names
 */
-function getAllActors() {
+async function getAllActors() {
   // Add code here
+  const all_actors = await Actor.findAll();
+  return all_actors.map(actor=>actor.name);
 }
 
 /*
   Write a function that returns an array of all the movie titles from 2008
 */
-function getAllMoviesFrom2008() {
+async function getAllMoviesFrom2008() {
   // Add code here
+  const movs= await  Movie.findAll({
+  	attributes:['title'],
+  	where:{
+  	  year:2008
+  	}
+  });
+  return movs.map(movie=>movie.title);
+  
 }
 
 /*
@@ -46,6 +63,11 @@ function getAllMoviesFrom2008() {
 */
 function deleteGenreYouAdded() {
   // Add code here
+  return Genre.destroy({
+  		where:{
+  		  id: 4
+  		 }
+  	});
 }
 
 /*
@@ -54,8 +76,12 @@ function deleteGenreYouAdded() {
   - the actor and movie record already exist in the database
   - add the association record to the database
 */
-function associateRosarioToEagleEye() {
+async function associateRosarioToEagleEye() {
   // Add code here
+  const searched_actor =await Actor.findByPk(2);
+  const searched_movie =await Movie.findByPk(4);
+  await searched_actor.addMovie(searched_movie);
+  
 }
 
 /*
@@ -66,6 +92,9 @@ function associateRosarioToEagleEye() {
 */
 async function associateRobertToTropicThunder() {
   // Add code here
+  const searched_actor =await Actor.findByPk(3);
+  const searched_movie =await Movie.findByPk(5);
+  await searched_actor.addMovie(searched_movie);
 }
 
 module.exports = {
